@@ -2,55 +2,77 @@
 
 Socijalna mreža za MotoGP navijače — SPA izrađena u Node.js + Express + MySQL.
 
-## Pokretanje projekta
+🌐 **Live:** hostano na [Renderu](https://render.com)
 
-### 1. Instaliraj XAMPP
-Preuzmi s https://www.apachefriends.org i pokreni **Apache** i **MySQL** u XAMPP Control Panelu.
+---
 
-### 2. Kreiraj bazu podataka
-Otvori **phpMyAdmin** (http://localhost/phpmyadmin), klikni **SQL** i zalijepi sadržaj fajla `db/schema.sql`, zatim klikni **Go**.
+## Tehnologije
 
-### 3. Instaliraj Node.js pakete
-```
-npm install
-```
-
-### 4. Pokreni server
-```
-npm start
-```
-
-Otvori http://localhost:3000
+- **Backend:** Node.js, Express
+- **Baza:** MySQL (udaljena, SSL/TLS konekcija)
+- **Auth:** JWT + bcryptjs
+- **Frontend:** Vanilla JS SPA (bez frameworka)
 
 ---
 
 ## Test korisnici
 
-| Uloga  | Username         | Password   |
-|--------|-----------------|------------|
-| Admin  | admin           | admin123   |
-| Vozač  | marc_marquez    | motogp123  |
-| Fan    | speedfreak99    | fan123     |
+| Uloga  | Username      | Password   |
+|--------|---------------|------------|
+| Admin  | admin         | admin123   |
+| Vozač  | marc_marquez  | motogp123  |
+| Fan    | speedfreak99  | fan123     |
+
+> Svi vozači koriste lozinku `motogp123`, svi fanovi `fan123`. Cijeli popis vozača i fanova nalazi se u `db/database.js`.
 
 ---
 
 ## Struktura projekta
 
 ```
-motogp-hub/
+MotoGPHub/
 ├── db/
-│   ├── database.js      ← MySQL konekcija i seed podataka
+│   ├── ca.pem           ← SSL CA certifikat za MySQL
+│   ├── database.js      ← MySQL pool, query helper, seed
 │   └── schema.sql       ← SQL za kreiranje tablica
 ├── routes/
-│   ├── auth.js          ← Register, login, /me
-│   ├── posts.js         ← Feed, komentari, glasanje, admin
-│   ├── users.js         ← Profili, driveri, follow/unfollow
-│   ├── live.js          ← Live chat diskusija
-│   └── auth.middleware.js
+│   ├── auth.js              ← Register, login, /me
+│   ├── auth.middleware.js   ← JWT provjera
+│   ├── posts.js             ← Feed, komentari, glasanje, admin moderacija
+│   ├── users.js             ← Profili, vozači, follow/unfollow
+│   └── live.js              ← Live chat diskusije
 ├── public/
-│   ├── index.html       ← SPA
+│   ├── index.html       ← SPA shell
 │   ├── references.html  ← Popis izvora
-│   ├── css/style.css
-│   └── js/              ← Frontend moduli
-└── server.js            ← Express server
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       ├── api.js       ← Fetch wrapper
+│       ├── app.js       ← Glavni router / init
+│       ├── auth.js      ← Login / register UI
+│       ├── posts.js     ← Feed i postovi
+│       ├── drivers.js   ← Lista vozača
+│       ├── teams.js     ← Lista timova
+│       ├── calendar.js  ← MotoGP kalendar
+│       ├── live.js      ← Live chat
+│       └── admin.js     ← Admin panel
+├── server.js            ← Express server, statički files, route mounting
+├── package.json
+└── README.md
 ```
+
+---
+
+## API rute (pregled)
+
+- `POST /api/auth/register` – registracija fana
+- `POST /api/auth/login` – login
+- `GET  /api/auth/me` – trenutni user (zahtijeva JWT)
+- `GET  /api/posts` – feed
+- `POST /api/posts` – novi post (status `pending` dok admin ne odobri)
+- `POST /api/posts/:id/vote` – like / dislike
+- `GET  /api/users/:username` – profil
+- `POST /api/users/:username/follow` – follow / unfollow
+- `GET  /api/live` – aktivne diskusije i poruke
+
+Detalji u `routes/*.js`.
