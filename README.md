@@ -1,6 +1,6 @@
 # MotoGP Social Hub
 
-Socijalna mreža za MotoGP navijače — SPA izrađena u Node.js + Express + MySQL.
+Socijalna mreža za MotoGP navijače izrađena u Node.js + Express + MySQL.
 
  **Live:** hostano na [Renderu](https://motogphub-c0wg.onrender.com)
 
