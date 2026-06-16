@@ -2,7 +2,7 @@
 
 Socijalna mreža za MotoGP navijače — SPA izrađena u Node.js + Express + MySQL.
 
-🌐 **Live:** hostano na [Renderu](https://render.com)
+ **Live:** hostano na [Renderu](https://motogphub-c0wg.onrender.com)
 
 ---
 
